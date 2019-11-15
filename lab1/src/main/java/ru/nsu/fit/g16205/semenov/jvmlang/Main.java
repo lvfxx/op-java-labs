@@ -17,17 +17,12 @@ public class Main {
     public static void main(String[] args) {
         JvmLangParser parser = Parboiled.createParser(JvmLangParser.class);
         String input = "a = 1\n" +
-                "b = 3\n" +
-                "if (a == b)\n" +
-                "print(5)\n" +
-                "fi\n" +
-                "if (true)\n" +
-                "print(10)\n" +
-                "fi\n" +
-                "a = a + 2\n" +
-                "if (a == b)\n" +
-                "print(7)\n" +
-                "fi\n";
+                "b = 10\n" +
+                "loop (a != b)\n" +
+                "print(a)\n" +
+                "a = a + 1\n" +
+                "pool\n" +
+                "print(a)\n";
 
         ParsingResult<AstNode> result = new ReportingParseRunner<AstNode>(parser.Program()).run(input);
 

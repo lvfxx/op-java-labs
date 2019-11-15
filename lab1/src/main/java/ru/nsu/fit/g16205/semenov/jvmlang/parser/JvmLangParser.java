@@ -114,8 +114,18 @@ public class JvmLangParser extends BaseParser<AstNode> {
     Rule Equal() {
         return FirstOf(
                 Sequence(
-                        Parentheses(), "== ", Divide(),
+                        NotEqual(), "== ", Equal(),
                         push(new EqualNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
+                ),
+                NotEqual()
+        );
+    }
+
+    Rule NotEqual() {
+        return FirstOf(
+                Sequence(
+                        Parentheses(), "!= ", NotEqual(),
+                        push(new NotEqualNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
                 ),
                 Parentheses()
         );
