@@ -20,10 +20,23 @@ public class PrintNode extends SequencedStatementNode {
 
     @Override
     public void write(MethodVisitor mv, Context context) {
-        // TODO now for int only
         mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+        String printMethodDescriptor;
+        switch (expression.getType(context)) {
+            case INTEGER:
+                printMethodDescriptor = "(I)V";
+                break;
+            case STRING:
+                printMethodDescriptor = "(Ljava/lang/String;)V";
+                break;
+            case BOOLEAN:
+                printMethodDescriptor = "(Z)V";
+                break;
+            default:
+                throw new AssertionError("Unknown type specified");
+        }
         expression.write(mv, context);
-        mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(I)V", false);
+        mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", printMethodDescriptor, false);
     }
 
     @Override

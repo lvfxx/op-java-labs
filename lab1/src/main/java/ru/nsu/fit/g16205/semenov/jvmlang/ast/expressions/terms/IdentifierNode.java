@@ -4,6 +4,7 @@ import org.objectweb.asm.MethodVisitor;
 import ru.nsu.fit.g16205.semenov.jvmlang.Type;
 import ru.nsu.fit.g16205.semenov.jvmlang.asm.Context;
 
+import static org.objectweb.asm.Opcodes.ALOAD;
 import static org.objectweb.asm.Opcodes.ILOAD;
 
 public class IdentifierNode extends TermNode {
@@ -30,8 +31,19 @@ public class IdentifierNode extends TermNode {
     @Override
     public void write(MethodVisitor mv, Context context) {
         int index = context.getVarIndex(identifier);
-        if (index == -1) throw new IllegalStateException("Variable " + identifier + " undefined");
-        // TODO now int only
-        mv.visitVarInsn(ILOAD, index);
+        if (index == -1)
+            throw new IllegalStateException("Undefined variable: " + identifier);
+        Type type = context.getVarType(identifier);
+        switch (type) {
+            case INTEGER:
+            case BOOLEAN:
+                mv.visitVarInsn(ILOAD, index);
+                break;
+            case STRING:
+                mv.visitVarInsn(ALOAD, index);
+                break;
+            default:
+                throw new AssertionError("Unknown type specified: " + type);
+        }
     }
 }

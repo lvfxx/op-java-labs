@@ -6,6 +6,7 @@ import ru.nsu.fit.g16205.semenov.jvmlang.asm.Context;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ExpressionNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.IdentifierNode;
 
+import static org.objectweb.asm.Opcodes.ASTORE;
 import static org.objectweb.asm.Opcodes.ISTORE;
 
 public class AssignNode extends SequencedStatementNode {
@@ -32,20 +33,29 @@ public class AssignNode extends SequencedStatementNode {
 
     @Override
     public void write(MethodVisitor mv, Context context) {
-        expression.write(mv, context);
         String varName = identifier.getIdentifier();
+        Type expressionType = expression.getType(context);
+        int index;
 
         if (context.isVarExists(varName)) {
-            if (!context.getVarType(varName).equals(expression.getType(context)))
-                throw new IllegalStateException("Invalid type specified");
-            int index = context.getVarIndex(varName);
-            // TODO now int only
-            mv.visitVarInsn(ISTORE, index);
-
+            if (!context.getVarType(varName).equals(expressionType))
+                throw new IllegalStateException("Type mismatch");
+            index = context.getVarIndex(varName);
         } else {
-            // TODO now int only
-            int index = context.addVar(varName, Type.INTEGER);
-            mv.visitVarInsn(ISTORE, index);
+            index = context.addVar(varName, expressionType);
+        }
+
+        expression.write(mv, context);
+        switch (expressionType) {
+            case INTEGER:
+            case BOOLEAN:
+                mv.visitVarInsn(ISTORE, index);
+                break;
+            case STRING:
+                mv.visitVarInsn(ASTORE, index);
+                break;
+            default:
+                throw new AssertionError("Unknown type specified");
         }
     }
 }

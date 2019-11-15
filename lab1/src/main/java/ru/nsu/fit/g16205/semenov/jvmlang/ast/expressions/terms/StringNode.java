@@ -4,33 +4,30 @@ import org.objectweb.asm.MethodVisitor;
 import ru.nsu.fit.g16205.semenov.jvmlang.Type;
 import ru.nsu.fit.g16205.semenov.jvmlang.asm.Context;
 
-public class BooleanNode extends TermNode {
-    private final boolean value;
+public class StringNode extends TermNode {
+    private final String value;
 
-    public BooleanNode(boolean value) {
+    // TODO fix espe characters that as strings
+    public StringNode(String value) {
         this.value = value;
     }
 
-    public boolean isValue() {
+    public String getValue() {
         return value;
     }
 
     @Override
     public Type getType(Context context) {
-        return Type.BOOLEAN;
+        return Type.STRING;
     }
 
     @Override
     public void write(MethodVisitor mv, Context context) {
-        if (value) {
-            mv.visitLdcInsn(1);
-        } else {
-            mv.visitLdcInsn(0);
-        }
+        mv.visitLdcInsn(value);
     }
 
     @Override
     public String toString() {
-        return value ? "true" : "false";
+        return '"' + value + '"';
     }
 }

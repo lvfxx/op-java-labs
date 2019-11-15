@@ -10,6 +10,7 @@ import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.operations.*;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.BooleanNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.IdentifierNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.NumberNode;
+import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.StringNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.statements.*;
 
 @BuildParseTree
@@ -139,7 +140,7 @@ public class JvmLangParser extends BaseParser<AstNode> {
     }
 
     Rule Term() {
-        return FirstOf(Boolean(), Number(), Identifier());
+        return FirstOf(Boolean(), String(), Number(), Identifier());
     }
 
     Rule Boolean() {
@@ -164,6 +165,24 @@ public class JvmLangParser extends BaseParser<AstNode> {
                 push(new NumberNode(Integer.parseInt(match()))),
                 OptWhiteSpace()
         );
+    }
+
+    Rule String() {
+        return Sequence(
+                '"',
+                ZeroOrMore(
+                        FirstOf(
+                                Escape(),
+                                Sequence(TestNot(AnyOf("\r\n\"\\")), ANY)
+                        )
+                ).suppressSubnodes(),
+                push(new StringNode(match())),
+                '"'
+        );
+    }
+
+    Rule Escape() {
+        return Sequence('\\', AnyOf("btnfr\"\'\\"));
     }
 
     Rule NewLine() {
