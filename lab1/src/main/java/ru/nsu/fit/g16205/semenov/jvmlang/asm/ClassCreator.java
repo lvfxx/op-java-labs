@@ -13,7 +13,7 @@ public class ClassCreator {
     private boolean visitEnded = false;
 
     public ClassCreator(String fcn) {
-        cw.visit(V1_8, ACC_PUBLIC + ACC_SUPER, fcn, null, "java/lang/Object", null);
+        cw.visit(V1_5, ACC_PUBLIC + ACC_SUPER, fcn, null, "java/lang/Object", null);
         initDefaultConstructor();
         mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", "([Ljava/lang/String;)V", null, null);
         mv.visitCode();
