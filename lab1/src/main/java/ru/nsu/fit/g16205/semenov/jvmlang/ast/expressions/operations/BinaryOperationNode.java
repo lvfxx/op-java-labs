@@ -2,7 +2,7 @@ package ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.operations;
 
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ExpressionNode;
 
-public abstract class BinaryOperationNode extends ExpressionNode {
+public abstract class BinaryOperationNode implements ExpressionNode {
 
     private final String operatorSign;
     private final ExpressionNode left;

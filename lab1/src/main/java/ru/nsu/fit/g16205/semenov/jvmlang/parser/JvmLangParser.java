@@ -7,6 +7,7 @@ import ru.nsu.fit.g16205.semenov.jvmlang.ast.AstNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ExpressionNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ParenthesesNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.operations.*;
+import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.operations.predicates.*;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.BooleanNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.IdentifierNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.NumberNode;
@@ -85,17 +86,17 @@ public class JvmLangParser extends BaseParser<AstNode> {
     Rule Multiply() {
         return FirstOf(
                 Sequence(
-                        Substract(), "* ", Multiply(),
+                        Subtract(), "* ", Multiply(),
                         push(new MultiplyNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
                 ),
-                Substract()
+                Subtract()
         );
     }
 
-    Rule Substract() {
+    Rule Subtract() {
         return FirstOf(
                 Sequence(
-                        Divide(), "- ", Substract(),
+                        Divide(), "- ", Subtract(),
                         push(new SubtractNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
                 ),
                 Divide()
@@ -125,11 +126,55 @@ public class JvmLangParser extends BaseParser<AstNode> {
     Rule NotEqual() {
         return FirstOf(
                 Sequence(
-                        Parentheses(), "!= ", NotEqual(),
+                        Greater(), "!= ", NotEqual(),
                         push(new NotEqualNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
+                ),
+                Greater()
+        );
+    }
+
+    Rule Greater() {
+        return FirstOf(
+                Sequence(
+                        GreaterOrEqual(), "> ", Greater(),
+                        push(new GreaterNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
+                ),
+                GreaterOrEqual()
+        );
+
+    }
+
+    Rule GreaterOrEqual() {
+        return FirstOf(
+                Sequence(
+                        Less(), ">= ", GreaterOrEqual(),
+                        push(new GreaterOrEqualNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
+                ),
+                Less()
+        );
+
+    }
+
+    Rule Less() {
+        return FirstOf(
+                Sequence(
+                        LessOrEqual(), "< ", Less(),
+                        push(new LessNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
+                ),
+                LessOrEqual()
+        );
+
+    }
+
+    Rule LessOrEqual() {
+        return FirstOf(
+                Sequence(
+                        Parentheses(), "<= ", LessOrEqual(),
+                        push(new LessOrEqualNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
                 ),
                 Parentheses()
         );
+
     }
 
     Rule Parentheses() {

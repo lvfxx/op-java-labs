@@ -3,16 +3,13 @@ package ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms;
 import org.objectweb.asm.MethodVisitor;
 import ru.nsu.fit.g16205.semenov.jvmlang.asm.Context;
 import ru.nsu.fit.g16205.semenov.jvmlang.Type;
+import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ExpressionNode;
 
-public class NumberNode extends TermNode {
+public class NumberNode implements ExpressionNode {
     private final int number;
 
     public NumberNode(int number) {
         this.number = number;
-    }
-
-    public int getNumber() {
-        return number;
     }
 
     @Override

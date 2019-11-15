@@ -4,15 +4,11 @@ import org.objectweb.asm.MethodVisitor;
 import ru.nsu.fit.g16205.semenov.jvmlang.Type;
 import ru.nsu.fit.g16205.semenov.jvmlang.asm.Context;
 
-public class ParenthesesNode extends ExpressionNode {
+public class ParenthesesNode implements ExpressionNode {
     private final ExpressionNode expression;
 
     public ParenthesesNode(ExpressionNode expression) {
         this.expression = expression;
-    }
-
-    public ExpressionNode getExpression() {
-        return expression;
     }
 
     @Override

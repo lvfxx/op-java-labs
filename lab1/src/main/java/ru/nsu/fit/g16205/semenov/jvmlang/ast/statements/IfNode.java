@@ -2,11 +2,13 @@ package ru.nsu.fit.g16205.semenov.jvmlang.ast.statements;
 
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import ru.nsu.fit.g16205.semenov.jvmlang.Type;
 import ru.nsu.fit.g16205.semenov.jvmlang.asm.Context;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ExpressionNode;
+import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.PredicateNode;
 
-import static org.objectweb.asm.Opcodes.IF_ICMPEQ;
 import static org.objectweb.asm.Opcodes.IF_ICMPNE;
+import static ru.nsu.fit.g16205.semenov.jvmlang.Type.BOOLEAN;
 
 public class IfNode extends SequencedStatementNode {
     private final ExpressionNode condition;
@@ -17,27 +19,26 @@ public class IfNode extends SequencedStatementNode {
         this.body = body;
     }
 
-    public ExpressionNode getCondition() {
-        return condition;
-    }
-
-    public StatementNode getBody() {
-        return body;
+    @Override
+    public void write(MethodVisitor mv, Context context) {
+        final Label endIf;
+        if (condition instanceof PredicateNode) {
+            endIf = ((PredicateNode) condition).writeAsJump(mv, context);
+        } else {
+            endIf = new Label();
+            Type conditionType = condition.getType(context);
+            if (!BOOLEAN.equals(conditionType))
+                throw new IllegalStateException("Invalid type specified: " + conditionType);
+            condition.write(mv, context);
+            mv.visitLdcInsn(1);
+            mv.visitJumpInsn(IF_ICMPNE, endIf);
+        }
+        body.write(mv, context);
+        mv.visitLabel(endIf);
     }
 
     @Override
     public String toString() {
         return "if (" + condition.toString() + ")\n" + body.toString() + "\nfi";
-    }
-
-    @Override
-    public void write(MethodVisitor mv, Context context) {
-        Label label = new Label();
-        // todo add type check
-        condition.write(mv, context);
-        mv.visitLdcInsn(1);
-        mv.visitJumpInsn(IF_ICMPNE, label);
-        body.write(mv, context);
-        mv.visitLabel(label);
     }
 }

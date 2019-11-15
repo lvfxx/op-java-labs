@@ -1,18 +1,18 @@
 package ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms;
 
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import ru.nsu.fit.g16205.semenov.jvmlang.Type;
 import ru.nsu.fit.g16205.semenov.jvmlang.asm.Context;
+import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.PredicateNode;
 
-public class BooleanNode extends TermNode {
+import static org.objectweb.asm.Opcodes.GOTO;
+
+public class BooleanNode implements PredicateNode {
     private final boolean value;
 
     public BooleanNode(boolean value) {
         this.value = value;
-    }
-
-    public boolean isValue() {
-        return value;
     }
 
     @Override
@@ -21,12 +21,19 @@ public class BooleanNode extends TermNode {
     }
 
     @Override
+    public Label writeAsJump(MethodVisitor mv, Context context) {
+        Label ifFalse = new Label();
+        if (!value)
+            mv.visitJumpInsn(GOTO, ifFalse);
+        return ifFalse;
+    }
+
+    @Override
     public void write(MethodVisitor mv, Context context) {
-        if (value) {
+        if (value)
             mv.visitLdcInsn(1);
-        } else {
+        else
             mv.visitLdcInsn(0);
-        }
     }
 
     @Override

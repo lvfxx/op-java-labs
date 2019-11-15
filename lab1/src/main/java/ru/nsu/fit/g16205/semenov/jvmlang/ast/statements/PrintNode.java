@@ -14,10 +14,6 @@ public class PrintNode extends SequencedStatementNode {
         this.expression = expression;
     }
 
-    public ExpressionNode getExpression() {
-        return expression;
-    }
-
     @Override
     public void write(MethodVisitor mv, Context context) {
         mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");

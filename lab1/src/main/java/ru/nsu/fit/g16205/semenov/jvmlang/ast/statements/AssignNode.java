@@ -18,14 +18,6 @@ public class AssignNode extends SequencedStatementNode {
         this.expression = expression;
     }
 
-    public IdentifierNode getIdentifier() {
-        return identifier;
-    }
-
-    public ExpressionNode getExpression() {
-        return expression;
-    }
-
     @Override
     public String toString() {
         return identifier.toString() + " = " + expression.toString();
@@ -55,7 +47,7 @@ public class AssignNode extends SequencedStatementNode {
                 mv.visitVarInsn(ASTORE, index);
                 break;
             default:
-                throw new AssertionError("Unknown type specified");
+                throw new AssertionError("Unknown type specified: " + expressionType);
         }
     }
 }

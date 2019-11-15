@@ -23,9 +23,8 @@ public class SubtractNode extends BinaryOperationNode {
 
     @Override
     public void write(MethodVisitor mv, Context context) {
-        // TODO order of application??
-        getRight().write(mv, context);
         getLeft().write(mv, context);
+        getRight().write(mv, context);
         mv.visitInsn(ISUB);
     }
 }

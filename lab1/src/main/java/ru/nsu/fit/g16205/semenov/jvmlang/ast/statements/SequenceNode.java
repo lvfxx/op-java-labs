@@ -12,14 +12,6 @@ public class SequenceNode extends StatementNode {
         this.right = right;
     }
 
-    public StatementNode getLeft() {
-        return left;
-    }
-
-    public StatementNode getRight() {
-        return right;
-    }
-
     @Override
     public void write(MethodVisitor mv, Context context) {
         left.write(mv, context);
