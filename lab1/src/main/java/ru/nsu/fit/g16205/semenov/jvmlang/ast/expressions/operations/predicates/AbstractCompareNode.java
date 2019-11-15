@@ -23,8 +23,8 @@ public abstract class AbstractCompareNode extends BinaryOperationNode implements
         Type rightType = getRight().getType(context);
 
         if (leftType.equals(rightType)) {
-            getLeft().write(mv, context);
             getRight().write(mv, context);
+            getLeft().write(mv, context);
             switch (leftType) {
                 case INTEGER:
                     writeIntCompare(mv, ifFalse);

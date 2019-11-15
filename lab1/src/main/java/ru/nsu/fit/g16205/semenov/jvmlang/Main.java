@@ -17,8 +17,7 @@ public class Main {
     public static void main(String[] args) {
         JvmLangParser parser = Parboiled.createParser(JvmLangParser.class);
         String input = "a = 1\n" +
-                "b = 10\n" +
-                "loop (a != b)\n" +
+                "loop (a < 12)\n" +
                 "print(a)\n" +
                 "a = a + 1\n" +
                 "if ((a / 2) == 4)\n" +

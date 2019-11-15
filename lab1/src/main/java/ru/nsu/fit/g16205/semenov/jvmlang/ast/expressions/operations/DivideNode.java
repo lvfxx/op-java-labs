@@ -16,14 +16,15 @@ public class DivideNode extends BinaryOperationNode {
 
     @Override
     public Type getType(Context context) {
-        if (INTEGER.equals(getRight().getType(context)) && INTEGER.equals(getLeft().getType(context)))
-            return INTEGER;
-        throw new IllegalStateException("Invalid arguments types");
+        return INTEGER;
     }
 
     @Override
     public void write(MethodVisitor mv, Context context) {
-        // TODO order of application??
+        Type leftType = getLeft().getType(context);
+        Type rightType = getRight().getType(context);
+        if (!(INTEGER.equals(leftType) && INTEGER.equals(rightType)))
+            throw new IllegalStateException("Invalid arguments types: " + leftType + " and " + rightType);
         getLeft().write(mv, context);
         getRight().write(mv, context);
         mv.visitInsn(IDIV);

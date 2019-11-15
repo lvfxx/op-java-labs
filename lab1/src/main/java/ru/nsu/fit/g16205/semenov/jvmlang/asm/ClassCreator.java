@@ -28,7 +28,7 @@ public class ClassCreator {
     public byte[] getBytecode() {
         if (!visitEnded) {
             mv.visitInsn(RETURN);
-            mv.visitMaxs(5, 5); // TODO how to determine correct values???
+            mv.visitMaxs(10, 10); // TODO how to determine correct values???
             mv.visitEnd();
             cw.visitEnd();
             visitEnded = true;
