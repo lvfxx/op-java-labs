@@ -16,10 +16,15 @@ import static org.parboiled.support.ParseTreeUtils.printNodeTree;
 public class Main {
     public static void main(String[] args) {
         JvmLangParser parser = Parboiled.createParser(JvmLangParser.class);
-        String input = "a     =      21         \n" +
-                "b     =     3    \n" +
-                "c          =    a      +     b  \n"+
-                "print   (    c   )     \n";
+        String input = "a = 1\n" +
+                "b = 3\n" +
+                "if (1)\n" +
+                "print(5)\n" +
+                "if (0)\n" +
+                "print(7)\n" +
+                "fi\n" +
+                "print(9)\n" +
+                "fi\n";
 
         ParsingResult<AstNode> result = new ReportingParseRunner<AstNode>(parser.Program()).run(input);
 
