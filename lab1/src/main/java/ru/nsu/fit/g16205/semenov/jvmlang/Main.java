@@ -18,12 +18,15 @@ public class Main {
         JvmLangParser parser = Parboiled.createParser(JvmLangParser.class);
         String input = "a = 1\n" +
                 "b = 3\n" +
-                "if (1)\n" +
+                "if (a == b)\n" +
                 "print(5)\n" +
-                "if (0)\n" +
-                "print(7)\n" +
                 "fi\n" +
-                "print(9)\n" +
+                "if (true)\n" +
+                "print(10)\n" +
+                "fi\n" +
+                "a = a + 2\n" +
+                "if (a == b)\n" +
+                "print(7)\n" +
                 "fi\n";
 
         ParsingResult<AstNode> result = new ReportingParseRunner<AstNode>(parser.Program()).run(input);
@@ -32,6 +35,8 @@ public class Main {
         ClassCreator cc = new ClassCreator("Main");
         cc.writeToMain(root);
         byte[] bytecode = cc.getBytecode();
+
+        System.out.println(root.toString());
 
         try (FileOutputStream out = new FileOutputStream("C:\\Users\\lvfx\\IdeaProjects\\untitled\\out\\production\\untitled\\Main.class")) {
             out.write(bytecode);

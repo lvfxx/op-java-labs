@@ -3,11 +3,14 @@ package ru.nsu.fit.g16205.semenov.jvmlang.parser;
 import org.parboiled.BaseParser;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
-import ru.nsu.fit.g16205.semenov.jvmlang.ast.statements.*;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.AstNode;
-import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.*;
+import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ExpressionNode;
+import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ParenthesesNode;
+import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.operations.*;
+import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.BooleanNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.IdentifierNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.NumberNode;
+import ru.nsu.fit.g16205.semenov.jvmlang.ast.statements.*;
 
 @BuildParseTree
 public class JvmLangParser extends BaseParser<AstNode> {
@@ -92,7 +95,7 @@ public class JvmLangParser extends BaseParser<AstNode> {
         return FirstOf(
                 Sequence(
                         Divide(), "- ", Substract(),
-                        push(new SubstractNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
+                        push(new SubtractNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
                 ),
                 Divide()
         );
@@ -101,8 +104,18 @@ public class JvmLangParser extends BaseParser<AstNode> {
     Rule Divide() {
         return FirstOf(
                 Sequence(
-                        Parentheses(), "/ ", Divide(),
+                        Equal(), "/ ", Divide(),
                         push(new DivideNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
+                ),
+                Equal()
+        );
+    }
+
+    Rule Equal() {
+        return FirstOf(
+                Sequence(
+                        Parentheses(), "== ", Divide(),
+                        push(new EqualNode((ExpressionNode) pop(1), (ExpressionNode) pop()))
                 ),
                 Parentheses()
         );
@@ -116,7 +129,15 @@ public class JvmLangParser extends BaseParser<AstNode> {
     }
 
     Rule Term() {
-        return FirstOf(Number(), Identifier());
+        return FirstOf(Boolean(), Number(), Identifier());
+    }
+
+    Rule Boolean() {
+        return Sequence(
+                FirstOf("true", "false"),
+                push(new BooleanNode(Boolean.parseBoolean(match()))),
+                OptWhiteSpace()
+        );
     }
 
     Rule Identifier() {
