@@ -3,7 +3,7 @@ package ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import ru.nsu.fit.g16205.semenov.jvmlang.Type;
-import ru.nsu.fit.g16205.semenov.jvmlang.asm.Context;
+import ru.nsu.fit.g16205.semenov.jvmlang.asm.context.Context;
 
 import static org.objectweb.asm.Opcodes.GOTO;
 

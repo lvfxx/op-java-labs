@@ -1,7 +1,7 @@
 package ru.nsu.fit.g16205.semenov.jvmlang.ast.statements;
 
 import org.objectweb.asm.MethodVisitor;
-import ru.nsu.fit.g16205.semenov.jvmlang.asm.Context;
+import ru.nsu.fit.g16205.semenov.jvmlang.asm.context.Context;
 
 public class SequenceNode extends StatementNode {
     private final StatementNode left;

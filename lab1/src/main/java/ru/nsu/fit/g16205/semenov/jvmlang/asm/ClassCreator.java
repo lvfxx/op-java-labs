@@ -2,6 +2,7 @@ package ru.nsu.fit.g16205.semenov.jvmlang.asm;
 
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
+import ru.nsu.fit.g16205.semenov.jvmlang.asm.context.Context;
 
 import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.Opcodes.RETURN;
@@ -17,6 +18,7 @@ public class ClassCreator {
         initDefaultConstructor();
         mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", "([Ljava/lang/String;)V", null, null);
         mv.visitCode();
+        context.enterScope();
     }
 
     // TODO handle exceptions
@@ -34,9 +36,6 @@ public class ClassCreator {
             visitEnded = true;
         }
         return cw.toByteArray();
-    }
-
-    private void visitPrint(String text) {
     }
 
     private void initDefaultConstructor() {

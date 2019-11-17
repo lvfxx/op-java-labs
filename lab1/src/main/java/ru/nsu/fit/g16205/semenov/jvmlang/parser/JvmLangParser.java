@@ -3,15 +3,13 @@ package ru.nsu.fit.g16205.semenov.jvmlang.parser;
 import org.parboiled.BaseParser;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
+import ru.nsu.fit.g16205.semenov.jvmlang.Type;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.AstNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ExpressionNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ParenthesesNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.operations.*;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.operations.predicates.*;
-import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.BooleanNode;
-import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.IdentifierNode;
-import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.NumberNode;
-import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.StringNode;
+import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.*;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.statements.*;
 
 @BuildParseTree
@@ -39,12 +37,13 @@ public class JvmLangParser extends BaseParser<AstNode> {
     }
 
     Rule SequencedStatement() {
-        return FirstOf(Assign(), If(), Loop(), Print());
+        return FirstOf(Declare(), Assign(), If(), Loop(), Print());
     }
 
-    Rule Print() {
-        return Sequence("print ", "( ", Expression(), ") ",
-                push(new PrintNode((ExpressionNode) pop()))
+    Rule Declare() {
+        return Sequence(
+                "var ", Identifier(), ": ", Type(),
+                push(new DeclareNode((IdentifierNode) pop(1), (TypeNode) pop()))
         );
     }
 
@@ -66,6 +65,12 @@ public class JvmLangParser extends BaseParser<AstNode> {
         return Sequence(
                 "if ", "( ", Expression(), ") ", NewLine(), Seq(), NewLine(), "fi ",
                 push(new IfNode((ExpressionNode) pop(1), (StatementNode) pop()))
+        );
+    }
+
+    Rule Print() {
+        return Sequence("print ", "( ", Expression(), ") ",
+                push(new PrintNode((ExpressionNode) pop()))
         );
     }
 
@@ -185,13 +190,22 @@ public class JvmLangParser extends BaseParser<AstNode> {
     }
 
     Rule Term() {
-        return FirstOf(Boolean(), String(), Number(), Identifier());
+        return FirstOf(Boolean(), Type(), String(), Number(), Identifier());
     }
 
     Rule Boolean() {
         return Sequence(
                 FirstOf("true", "false"),
                 push(new BooleanNode(Boolean.parseBoolean(match()))),
+                OptWhiteSpace()
+        );
+    }
+
+    Rule Type() {
+        return Sequence(
+                // TODO add variables of Type type support
+                FirstOf("String", "Int", "Bool"),
+                push(new TypeNode(Type.fromString(match()))),
                 OptWhiteSpace()
         );
     }

@@ -5,26 +5,29 @@ import ru.nsu.fit.g16205.semenov.jvmlang.Type;
 import ru.nsu.fit.g16205.semenov.jvmlang.asm.context.Context;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ExpressionNode;
 
-public class StringNode implements ExpressionNode {
-    private final String value;
+public class TypeNode implements ExpressionNode {
 
-    // TODO fix espe characters that as strings
-    public StringNode(String value) {
-        this.value = value;
+    private final Type type;
+
+    public TypeNode(Type type) {
+        this.type = type;
     }
 
-    @Override
-    public Type getType(Context context) {
-        return Type.STRING;
+    public Type getType() {
+        return type;
     }
 
     @Override
     public void write(MethodVisitor mv, Context context) {
-        mv.visitLdcInsn(value);
+    }
+
+    @Override
+    public Type getType(Context context) {
+        return Type.TYPE;
     }
 
     @Override
     public String toString() {
-        return '"' + value + '"';
+        return type.toString();
     }
 }

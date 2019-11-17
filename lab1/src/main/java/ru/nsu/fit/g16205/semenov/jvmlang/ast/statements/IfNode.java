@@ -3,7 +3,7 @@ package ru.nsu.fit.g16205.semenov.jvmlang.ast.statements;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import ru.nsu.fit.g16205.semenov.jvmlang.Type;
-import ru.nsu.fit.g16205.semenov.jvmlang.asm.Context;
+import ru.nsu.fit.g16205.semenov.jvmlang.asm.context.Context;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ExpressionNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.PredicateNode;
 
@@ -33,7 +33,9 @@ public class IfNode extends SequencedStatementNode {
             mv.visitLdcInsn(1);
             mv.visitJumpInsn(IF_ICMPNE, endIf);
         }
+        context.enterScope();
         body.write(mv, context);
+        context.leaveScope();
         mv.visitLabel(endIf);
     }
 

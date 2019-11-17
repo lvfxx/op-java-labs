@@ -2,7 +2,8 @@ package ru.nsu.fit.g16205.semenov.jvmlang.ast.statements;
 
 import org.objectweb.asm.MethodVisitor;
 import ru.nsu.fit.g16205.semenov.jvmlang.Type;
-import ru.nsu.fit.g16205.semenov.jvmlang.asm.Context;
+import ru.nsu.fit.g16205.semenov.jvmlang.asm.context.Context;
+import ru.nsu.fit.g16205.semenov.jvmlang.asm.context.VarData;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ExpressionNode;
 import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.terms.IdentifierNode;
 
@@ -25,26 +26,21 @@ public class AssignNode extends SequencedStatementNode {
 
     @Override
     public void write(MethodVisitor mv, Context context) {
-        String varName = identifier.getIdentifier();
+        VarData varData = context.getVarData(identifier.getIdentifier());
         Type expressionType = expression.getType(context);
-        int index;
 
-        if (context.isVarExists(varName)) {
-            if (!context.getVarType(varName).equals(expressionType))
-                throw new IllegalStateException("Type mismatch");
-            index = context.getVarIndex(varName);
-        } else {
-            index = context.addVar(varName, expressionType);
-        }
+        if (!varData.getType().equals(expressionType))
+            throw new IllegalStateException("Type mismatch: assigning " + expressionType +
+                    " expression to " + varData.getType() + " variable");
 
         expression.write(mv, context);
         switch (expressionType) {
             case INTEGER:
             case BOOLEAN:
-                mv.visitVarInsn(ISTORE, index);
+                mv.visitVarInsn(ISTORE, varData.getIndex());
                 break;
             case STRING:
-                mv.visitVarInsn(ASTORE, index);
+                mv.visitVarInsn(ASTORE, varData.getIndex());
                 break;
             default:
                 throw new AssertionError("Unknown type specified: " + expressionType);
