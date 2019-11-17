@@ -48,6 +48,6 @@ public class DeclareNode extends SequencedStatementNode {
 
     @Override
     public String toString() {
-        return identifier.toString() + ": " + varType.toString();
+        return "var " + identifier.toString() + ": " + varType.toString();
     }
 }
