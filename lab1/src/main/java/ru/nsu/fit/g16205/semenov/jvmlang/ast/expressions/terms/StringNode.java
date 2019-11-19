@@ -8,9 +8,16 @@ import ru.nsu.fit.g16205.semenov.jvmlang.ast.expressions.ExpressionNode;
 public class StringNode implements ExpressionNode {
     private final String value;
 
-    // TODO fix espe characters that as strings
     public StringNode(String value) {
-        this.value = value;
+        this.value = value
+                .replace("\\b", "\b")
+                .replace("\\t", "\t")
+                .replace("\\n", "\n")
+                .replace("\\f", "\f")
+                .replace("\\r", "\r")
+                .replace("\\\\", "\\")
+                .replace("\\\"", "\"")
+                .replace("\\\'", "\'");
     }
 
     @Override
