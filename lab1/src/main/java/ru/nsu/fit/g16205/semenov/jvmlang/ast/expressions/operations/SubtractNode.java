@@ -15,11 +15,6 @@ public class SubtractNode extends BinaryOperationNode {
     }
 
     @Override
-    public Type getType(Context context) {
-        return INTEGER;
-    }
-
-    @Override
     public void write(MethodVisitor mv, Context context) {
         Type leftType = getLeft().getType(context);
         Type rightType = getRight().getType(context);

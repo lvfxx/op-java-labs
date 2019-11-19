@@ -16,8 +16,7 @@ public class StringNode implements ExpressionNode {
                 .replace("\\f", "\f")
                 .replace("\\r", "\r")
                 .replace("\\\\", "\\")
-                .replace("\\\"", "\"")
-                .replace("\\\'", "\'");
+                .replace("\\\"", "\"");
     }
 
     @Override

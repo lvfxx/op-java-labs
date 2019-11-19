@@ -1,0 +1,18 @@
+var a8sdf_FD12: Int
+a8sdf_FD12 = 1
+var b: String
+b = "AB\n\t\\B\"A'" + "adsad" + "c3pi"
+loop (a8sdf_FD12 < 12)
+	var b: Int
+	print(a8sdf_FD12)
+	print(b)
+	a8sdf_FD12 = a8sdf_FD12 + 1
+	if ((a8sdf_FD12 / 2) == 4)
+	    var b: Bool
+	    b = true
+	    print(b)
+	    print("arrgghh!!!")
+	fi
+pool
+print(a8sdf_FD12)
+print(b)

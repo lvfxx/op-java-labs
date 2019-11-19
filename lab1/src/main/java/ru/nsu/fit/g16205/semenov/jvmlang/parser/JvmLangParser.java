@@ -248,12 +248,12 @@ public class JvmLangParser extends BaseParser<AstNode> {
                         )
                 ).suppressSubnodes(),
                 push(new StringNode(match())),
-                '"'
+                "\" "
         );
     }
 
     Rule Escape() {
-        return Sequence('\\', AnyOf("btnfr\"\'\\"));
+        return Sequence('\\', AnyOf("btnfr\"\\"));
     }
 
     Rule NewLine() {
