@@ -21,7 +21,6 @@ public class ClassCreator {
         context.enterScope();
     }
 
-    // TODO handle exceptions
     public void writeToMain(BytecodeProvider bp) {
         if (visitEnded) throw new IllegalStateException("Visitor ended its job.");
         bp.write(mv, context);

@@ -37,10 +37,7 @@ public class JvmLangParser extends BaseParser<AstNode> {
     }
 
     Rule SequencedStatement() {
-        return Sequence(
-                OptWhiteSpace(),
-                FirstOf(Declare(), Assign(), If(), Loop(), Print())
-        );
+        return FirstOf(Declare(), Assign(), If(), Loop(), Print());
     }
 
     Rule Declare() {
@@ -222,7 +219,7 @@ public class JvmLangParser extends BaseParser<AstNode> {
                         push(new IdentifierNode(((IdentifierNode) pop()).getIdentifier().concat(match())))
                 )),
                 OptWhiteSpace()
-        );
+        ).suppressSubnodes();
     }
 
     Rule IdSymbol() {
@@ -260,11 +257,11 @@ public class JvmLangParser extends BaseParser<AstNode> {
     }
 
     Rule NewLine() {
-        return Ch('\n');
+        return Sequence(Optional(Ch('\r')), Ch('\n'), OptWhiteSpace());
     }
 
     Rule OptWhiteSpace() {
-        return ZeroOrMore(AnyOf(" \t"));
+        return ZeroOrMore(AnyOf(" \t")).suppressSubnodes();
     }
 
 }
