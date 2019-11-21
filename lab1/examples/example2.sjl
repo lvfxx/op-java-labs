@@ -1,0 +1,17 @@
+var a: Int
+a = 123
+if (a < 150)
+	print("super!!!")
+	var b: String
+	b = "Hello"
+	var c: Bool
+	c = true
+	if (c)
+		a = a + 100
+	fi
+fi
+print(a)
+loop (a > 0)
+	print(a)
+	a = a - 10
+pool

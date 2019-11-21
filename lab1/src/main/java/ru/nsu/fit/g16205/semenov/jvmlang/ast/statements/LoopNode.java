@@ -42,6 +42,7 @@ public class LoopNode extends SequencedStatementNode {
             mv.visitJumpInsn(IF_ICMPNE, endLoop);
         }
         context.enterScope();
+        context.setEndOfBlock(endLoop);
         body.write(mv, context);
         context.leaveScope();
         mv.visitJumpInsn(GOTO, beginLoop);

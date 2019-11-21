@@ -1,5 +1,6 @@
 package ru.nsu.fit.g16205.semenov.jvmlang.asm.context;
 
+import org.objectweb.asm.Label;
 import ru.nsu.fit.g16205.semenov.jvmlang.Type;
 
 import java.util.Deque;
@@ -9,6 +10,15 @@ public class Context {
 
     private final LocalVarArray varArray = new LocalVarArray();
     private final Deque<Scope> scopes = new LinkedList<>();
+    private Label endOfBlock = null;
+
+    public Label getEndOfBlock() {
+        return endOfBlock;
+    }
+
+    public void setEndOfBlock(Label endOfBlock) {
+        this.endOfBlock = endOfBlock;
+    }
 
     public void enterScope() {
         scopes.addFirst(new Scope(varArray));

@@ -37,7 +37,14 @@ public class JvmLangParser extends BaseParser<AstNode> {
     }
 
     Rule SequencedStatement() {
-        return FirstOf(Declare(), Assign(), If(), Loop(), Print());
+        return FirstOf(Declare(), Assign(), Break(), If(), Loop(), Print());
+    }
+
+    Rule Break() {
+        return Sequence(
+                "break ",
+                push(new BreakNode())
+        );
     }
 
     Rule Declare() {
