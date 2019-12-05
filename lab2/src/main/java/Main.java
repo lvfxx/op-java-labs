@@ -35,13 +35,17 @@ public class Main {
     private static void findData(String filename, String pattern) {
         try {
             Set<GrepEnhanced.Result> result = GrepEnhanced.find(Path.of(filename), pattern.getBytes());
-            result.forEach(res -> System.out.println(res.path + " (" + res.position + ")"));
+            result.forEach(res -> System.out.println(res.path + " (starting position: " + res.position + ")"));
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
     }
 
     private static void printHelp() {
-        System.out.println("Usage: -h | --data path pattern | --name path pattern");
+        System.out.println("Usage: java -jar prog.jar <option>\n" +
+                "Options:\n" +
+                "-h                      print help\n" +
+                "--data <path> <pattern> find text pattern in specified file or directory including subdirectories\n" +
+                "--name <path> <pattern> find text pattern in file names in specified directory including subdirectories");
     }
 }
