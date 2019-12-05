@@ -1,20 +1,20 @@
 import java.io.IOException;
 import java.io.InputStream;
 
-public class BMHAlgorithmWorker {
+public class GrepWorker {
 
-    private static final int NOT_FOUND = -1;
+    public static final int NOT_FOUND = -1;
 
     private final byte[] pattern;
     private final ShiftsTable shiftsTable;
 
-    public BMHAlgorithmWorker(byte[] pattern) {
+    public GrepWorker(byte[] pattern) {
         this.pattern = pattern;
         shiftsTable = new ShiftsTable(pattern);
     }
 
     // with pre-calculated shifts table
-    public BMHAlgorithmWorker(byte[] pattern, ShiftsTable shiftsTable) {
+    public GrepWorker(byte[] pattern, ShiftsTable shiftsTable) {
         this.pattern = pattern;
         this.shiftsTable = shiftsTable;
     }
