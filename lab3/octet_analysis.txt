@@ -1,0 +1,13 @@
+2a 		aload_0
+b4 		getfield
+00 
+02 		#2
+1b 		iload_1
+68 		imul
+3d 		istore_2
+2a 		aload_0
+1c 		iload_2
+b5 		putfield
+00 		#2
+02
+b1 		return
